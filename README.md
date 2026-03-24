@@ -2,54 +2,61 @@
 
 `meditation` 是一个“低频外部输入 + 高频内在反思”的循环式智能体项目。
 
-核心思想：
+## 你现在可以直接运行
+
+```bash
+python meditation.py --topic "AI 如何提升长期推理能力？" --rounds 3 --auto
+```
+
+- `--rounds`：运行轮数。
+- `--auto`：自动把本轮 `Counter-Question` 喂给下一轮。
+- `--memory-file`：记忆持久化路径（默认 `.meditation/memory.json`）。
+
+## 核心思想
+
 - 用户输入一个话题或问题。
 - 模型在必要时进行外部搜索（受限使用）。
 - 模型围绕话题做开放式联想与反思（`think` 没有刚性目标，只要相关即可）。
-- 模型输出：
-  1) 阶段性总结；
-  2) 基于 memory history 的综合结论；
-  3) 一个反问（该反问会作为下一轮用户输入）；
-- 循环往复，在“内审 + 记忆”的过程中逐步获得更高质量的理解与回答。
+- 模型每轮固定输出：
+  1) `Meditation Summary`
+  2) `Memory-History Synthesis`
+  3) `Current Best Answer`
+  4) `Counter-Question`
+- 循环往复，在“内审 + 记忆”的过程中逐步获得更高质量理解。
 
 > meditation 的含义：接受少量外部信息，不断反思、回答，并在内审中累积更高智能。
+
+## 当前原型能力（Runnable Prototype）
+
+- ✅ 可运行 CLI 循环代理。
+- ✅ `web_search` 每小时最多 5 次的频控。
+- ✅ nanobot-style 分层记忆：working / episodic / semantic。
+- ✅ token 压缩：工作记忆超限时自动压缩进 episodic。
+- ✅ 输出中强制包含 memory history 综合段。
 
 ## 项目目标
 
 1. **构建可持续多轮思考循环**
-   - 每轮都有输入、联想、总结、反问。
-   - 让系统能在没有明确终点的探索中，持续产出有价值中间结论。
+2. **控制外部搜索依赖（少搜多想）**
+3. **引入稳健记忆机制（参考 nanobot）**
+4. **输出必须是历史综合，而非单轮快照**
+5. **让反问成为下一轮驱动器**
 
-2. **控制外部搜索依赖**
-   - 提倡“少搜多想”，防止模型被信息噪声牵引。
-   - 工具 `web_search` 必须按需调用，不可滥用（每小时最多 5 次）。
-
-3. **引入稳健记忆机制**
-   - 完整参考 `nanobot` 的记忆机制设计。
-   - 包含 token 压缩与分层记忆，保证长程对话可持续。
-
-4. **输出必须是“历史综合”**
-   - 最终回答必须结合 memory history。
-   - 明确呈现：强化点、修正点、未决点。
-
-5. **把反问变成下一轮驱动器**
-   - 输出问题不是装饰，而是下一轮输入源。
-   - 让探索路径可自我推进。
-
-## 当前文档结构
+## 文件结构
 
 ```text
 meditation/
-├─ README.md                  # 项目目标与总体说明
+├─ meditation.py              # 可运行原型（CLI）
+├─ README.md
 └─ docs/
-   ├─ ARCHITECTURE.md         # 系统架构与模块关系
-   ├─ LOOP.md                 # 单轮/多轮循环流程定义
-   ├─ TOOLS.md                # 工具约束（尤其 web_search 频控）
-   ├─ MEMORY.md               # 记忆机制（参考 nanobot + token 压缩）
-   └─ PROMPT_SPEC.md          # 面向模型的系统提示词草案（v2）
+   ├─ ARCHITECTURE.md
+   ├─ LOOP.md
+   ├─ TOOLS.md
+   ├─ MEMORY.md
+   └─ PROMPT_SPEC.md
 ```
 
-## 快速导航
+## 文档导航
 
 - 架构说明：`docs/ARCHITECTURE.md`
 - 循环流程：`docs/LOOP.md`
