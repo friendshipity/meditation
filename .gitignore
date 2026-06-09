@@ -1,0 +1,6 @@
+# Meditation runtime data (layered memory, search log, insights)
+.meditation/
+
+# Python
+__pycache__/
+*.pyc
