@@ -17,6 +17,21 @@
 
 本项目以 **Claude Code skill** 的形式落地，命令是 `/meditate`。在项目根目录打开 Claude Code 后，一个回合内即可自动连跑 N 轮反思。
 
+### 安装
+
+skill 随仓库分发（在 `.claude/skills/meditate/`），**无需额外安装**：
+
+```bash
+git clone git@github.com:friendshipity/meditation.git
+cd meditation
+claude            # 在项目根启动 Claude Code，/meditate 即可用
+```
+
+依赖：`python3`（脚本仅用标准库，无需 pip 安装）。
+
+> 想在任意目录都能用？把它装成**用户级** skill：
+> `cp -r .claude/skills/meditate ~/.claude/skills/`
+
 ### 基本用法
 
 ```text
